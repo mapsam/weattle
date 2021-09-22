@@ -25,7 +25,7 @@ export default function Index({ json }) {
   return (
     <div>
       <div className='full'>
-        <h1>Weattle.</h1>
+        <h1>Weattle. ☁️</h1>
         <p className='italics'>
           Weather in Seattle.&nbsp;
           {format(utcToZonedTime(new Date(json.current.dt * 1000), json.timezone), 'yyyy-MM-dd HH:mm (z)', { timeZone: json.timezone })}
