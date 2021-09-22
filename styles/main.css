@@ -1,0 +1,20 @@
+body {
+  font-family: 'Menlo', 'Bitstream Vera Sans Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.full {
+  width: 100%;
+  margin: 20px;
+  display: block;
+}
+
+.container {
+  display: inline-block;
+  vertical-align: top;
+  width: auto;
+  margin: 20px;
+}
+
+.italics {
+  font-style: italic;
+}
