@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { utcToZonedTime, format } from 'date-fns-tz';
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const base = 'https://api.openweathermap.org/data/2.5';
   const key = process.env.OPENWEATHER_API_KEY;
   // https://openweathermap.org/api/one-call-api
