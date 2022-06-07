@@ -12,7 +12,8 @@ export async function getServerSideProps() {
   return { props: { json } };
 }
 
-function getEmoji(item, raw) {
+function getEmoji(params) {
+  const { item, raw, current } = params;
   let val = '☁';
   switch(item.weather[0].main) {
     case 'Clouds':
@@ -48,7 +49,13 @@ function getEmoji(item, raw) {
       val = '🌫';
       break;
     case 'Clear':
-      val = '🌙	';
+      if (item.dt > current.sunrise && item.dt < current.sunset) {
+        val = '☀️'
+      } else {
+        console.log(item);
+        val = '🌙	';
+      }
+
       break;
     default:
       break;
@@ -75,21 +82,21 @@ export default function Index({ json }) {
     <div>
       <Head>
         <title>Weattle</title>
-        <link rel="icon" href={`data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${getEmoji(json.current, true)}</text></svg>`}></link>
+        <link rel="icon" href={`data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${getEmoji({ item: json.current, raw: true, current: json.current })}</text></svg>`}></link>
       </Head>
 
       <div className='full'>
-        <h1>Weattle. {getEmoji(json.current)}</h1>
+        <h1>Weattle. {getEmoji({ item: json.current, current: json.current })}</h1>
         <p className='italics'>
           Weather in Seattle.&nbsp;
-          {format(utcToZonedTime(new Date(json.current.dt * 1000), json.timezone), 'yyyy-MM-dd HH:mm (z)', { timeZone: json.timezone })}
+          {format(utcToZonedTime(new Date(json.current.dt * 1000), json.timezone), 'yyyy-MM-dd HH:mm (z)', { timeZone: json.timezone, current: json.current })}
         </p>
         <p><Link href='https://openweathermap.org/'>OpenWeatherMap</Link></p>
       </div>
 
       <div className='container'>
         <h3>Current</h3>
-        <p>{Math.round(json.current.temp)}&deg;F {getEmoji(json.current)}</p>
+        <p>{Math.round(json.current.temp)}&deg;F {getEmoji({ item: json.current, current: json.current })}</p>
       </div>
 
       <div className='container'>
@@ -98,12 +105,12 @@ export default function Index({ json }) {
         {json.hourly.map((h, i) => {
           const d = utcToZonedTime(new Date(h.dt * 1000), json.timezone);
           const dt = format(d, 'MM-dd', { timeZone: json.timezone });
-          const hr = format(d, 'HH', { timeZone: json.timezone });
-          const dtpre = hr === '00' || i === 0 ? dt : (<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>);
+          const hr = format(d, 'hhaaa', { timeZone: json.timezone });
+          const dtpre = hr === '12am' || i === 0 ? dt : (<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>);
           return (
             <p>
               {dtpre}&nbsp;{hr}:&nbsp;
-              {Math.round(h.temp)}&deg;F {getEmoji(h)}
+              {Math.round(h.temp)}&deg;F {getEmoji({ item: h, current: json.current })}
             </p>
           );
         })}
@@ -118,7 +125,7 @@ export default function Index({ json }) {
           return (
             <p>
               {dt}:&nbsp;
-              {Math.round(day.temp.day)}&deg;F [{Math.round(day.temp.min)}/{Math.round(day.temp.max)}] {getEmoji(day)}
+              {Math.round(day.temp.day)}&deg;F [{Math.round(day.temp.min)}/{Math.round(day.temp.max)}] {getEmoji({ item: day, current: json.current })}
             </p>
           );
         })}
