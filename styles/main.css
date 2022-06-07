@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Noto Color Emoji';
+  src: url('/Noto-Color-Emoji/NotoColorEmoji.ttf')
+}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Emoji&display=swap');
+
 body {
   font-family: 'Menlo', 'Bitstream Vera Sans Mono', 'Monaco', 'Consolas', monospace;
 }
@@ -17,4 +23,11 @@ body {
 
 .italics {
   font-style: italic;
+}
+
+.emoji {
+  font-family: 'Noto Color Emoji', sans-serif;
+}
+.emoji-mono {
+  font-family: 'Noto Emoji', sans-serif;
 }
